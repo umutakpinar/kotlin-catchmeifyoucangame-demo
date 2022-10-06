@@ -40,16 +40,17 @@ class GameActivity : AppCompatActivity() {
 
         //setSharedPreferences
         sharedPreferences = this@GameActivity.getSharedPreferences("com.umutakpinar.catchmeifyoucan",Context.MODE_PRIVATE)
+        //ve godMode atandı
+        godMode = isGodModeEnabled()
 
         //checkbestScore and set
         checkBestScore()
 
-        // Scoreekrnada gösterildi ve godMode atandı
+        // Scoreekrnada gösterildi
         setScoreText()
-        godMode = isGodModeEnabled()
-        if(godMode){
+        /*if(godMode){
             Toast.makeText(this@GameActivity,"God mode enabled!",Toast.LENGTH_SHORT).show()
-        }
+        }*/
 
         //set invisinle go text
         binding.textViewInfo.visibility = View.INVISIBLE
@@ -81,14 +82,33 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun checkBestScore(){
-        bestScore = sharedPreferences.getInt("bestScore",0)
+        if(godMode){
+            bestScore = sharedPreferences.getInt("bestScoreGodMode",0)
+        }else{
+            bestScore = sharedPreferences.getInt("bestScore",0)
+        }
     }
 
     private fun checkNewScoreIsBestAndSetIfTrue(){
-        if( score > bestScore){
+
+        if(godMode){
+            if( score > bestScore){
+                sharedPreferences.edit().putInt("bestScoreGodMode",score).apply()
+                Toast.makeText(this@GameActivity,"Voila! You broke your best in GodMode!",Toast.LENGTH_SHORT).show()
+            }
+        }else{
+            if( score > bestScore){
+                sharedPreferences.edit().putInt("bestScore",score).apply()
+                Toast.makeText(this@GameActivity,"Voila! You broke your best score!",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        /*
+        * if( score > bestScore){
             sharedPreferences.edit().putInt("bestScore",score).apply()
             Toast.makeText(this@GameActivity,"Voila! You broke your best score!",Toast.LENGTH_SHORT).show()
-        }
+        }*/
     }
 
     private fun startTimerAndGame(){

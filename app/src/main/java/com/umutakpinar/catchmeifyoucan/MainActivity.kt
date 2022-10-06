@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     private var switch : Boolean? = null
     private var bestScore : Int = 0
+    private var bestScoreGodMode : Int = 0
     private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         //check best Score show it on screen
         checkBestScore()
-        showBestScore()
+        showBestScore(false)
     }
 
     public fun playButtonClicked(view: View){
@@ -56,16 +57,23 @@ class MainActivity : AppCompatActivity() {
         }else{
             binding.btnStartGame.setBackgroundColor(Color.BLUE)
         }
+        showBestScore(switch!!)
         Toast.makeText(this@MainActivity,"God mode: $switch",Toast.LENGTH_SHORT).show()
     }
 
     private fun checkBestScore(){
         bestScore = sharedPreferences.getInt("bestScore",0);
+        bestScoreGodMode = sharedPreferences.getInt("bestScoreGodMode",0)
     }
 
-    private fun showBestScore(){
-        val scoreText = "Best : $bestScore"
-        binding.textViewBestScore.text = scoreText
+    private fun showBestScore(godMode : Boolean){
+        if(godMode){
+            val scoreText = "Best (God): $bestScoreGodMode"
+            binding.textViewBestScore.text = scoreText
+        }else{
+            val scoreText = "Best : $bestScore"
+            binding.textViewBestScore.text = scoreText
+        }
     }
 
     public fun resetScores(view : View){
@@ -82,4 +90,5 @@ class MainActivity : AppCompatActivity() {
         areYouSureAlertDialog.setCancelable(false);
         areYouSureAlertDialog.show()
     }
+
 }
