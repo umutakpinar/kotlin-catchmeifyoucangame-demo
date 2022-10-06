@@ -3,11 +3,13 @@ package com.umutakpinar.catchmeifyoucan
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.umutakpinar.catchmeifyoucan.databinding.ActivityGameBinding
 import com.umutakpinar.catchmeifyoucan.databinding.ActivityMainBinding
 
@@ -22,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         val view : View = binding.root
         setContentView(view)
 
+        //Button color blue
+        binding.btnStartGame.setBackgroundColor(Color.BLUE)
+
         //Switch cod null durumdan çıakrıldı şuanki değeri eşitlendi
         switchCondition()
 
@@ -30,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         //check best Score show it on screen
         checkBestScore()
+        showBestScore()
     }
 
     public fun playButtonClicked(view: View){
@@ -45,6 +51,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun switchCondition(){
         switch = binding.switchGodMode.isChecked
+        if(switch == true){ //Burada godMode açık oludğu için bestSCore'u gizleyip godMode'un best Score'unu göstermelisin
+            binding.btnStartGame.setBackgroundColor(Color.RED)
+        }else{
+            binding.btnStartGame.setBackgroundColor(Color.BLUE)
+        }
         Toast.makeText(this@MainActivity,"God mode: $switch",Toast.LENGTH_SHORT).show()
     }
 
@@ -53,6 +64,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBestScore(){
-        binding.textViewBestScore.text = bestScore.toString();
+        val scoreText = "Best : $bestScore"
+        binding.textViewBestScore.text = scoreText
     }
+
+    public fun resetScores(view : View){
+        val areYouSureAlertDialog = AlertDialog.Builder(this@MainActivity)
+        areYouSureAlertDialog.setTitle("Delete Scores")
+        areYouSureAlertDialog.setMessage("Do you really want to delete your best scores?")
+        areYouSureAlertDialog.setPositiveButton("Yes, delete"){dialog, which ->
+            sharedPreferences.edit().clear().apply()
+            recreate()
+        }
+        areYouSureAlertDialog.setNegativeButton("NO! Never"){dialog, which ->
+            Toast.makeText(this@MainActivity,"Don't worry mate, we keep your score...",Toast.LENGTH_SHORT).show()
+        }
+        areYouSureAlertDialog.show()
+    }
+
+
 }
