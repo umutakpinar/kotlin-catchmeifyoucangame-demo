@@ -115,6 +115,7 @@ class GameActivity : AppCompatActivity() {
                     endGameAlertDialog.setNegativeButton("Exit") {dialog,which ->
                         finish()
                     }
+                    endGameAlertDialog.setCancelable(false)
                     endGameAlertDialog.show()
                 }
             }

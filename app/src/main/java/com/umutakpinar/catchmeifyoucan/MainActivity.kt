@@ -79,8 +79,7 @@ class MainActivity : AppCompatActivity() {
         areYouSureAlertDialog.setNegativeButton("NO! Never"){dialog, which ->
             Toast.makeText(this@MainActivity,"Don't worry mate, we keep your score...",Toast.LENGTH_SHORT).show()
         }
+        areYouSureAlertDialog.setCancelable(false);
         areYouSureAlertDialog.show()
     }
-
-
 }
